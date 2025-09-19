@@ -1,0 +1,39 @@
+kjv:1Chr:1:1::Adam, Sheth, Enosh,
+kjv:1Chr:1:2::Kenan, Mahalaleel, Jered,
+kjv:1Chr:1:3::Henoch, Methuselah, Lamech,
+kjv:1Chr:1:4::Noah, Shem, Ham, and Japheth.
+kjv:1Chr:1:5::The sons of Japheth; Gomer, and Magog, and Madai, and Javan, and Tubal, and Meshech, and Tiras.
+kjv:1Chr:1:6::And the sons of Gomer; Ashchenaz, and Riphath, and Togarmah.
+kjv:1Chr:1:7::And the sons of Javan; Elishah, and Tarshish, Kittim, and Dodanim.
+kjv:1Chr:1:8::The sons of Ham; Cush, and Mizraim, Put, and Canaan.
+kjv:1Chr:1:9::And the sons of Cush; Seba, and Havilah, and Sabta, and Raamah, and Sabtecha. And the sons of Raamah; Sheba, and Dedan.
+kjv:1Cor:7:39::The wife is bound by the law as long as her husband liveth; but if her husband be dead, she is at liberty to be married to whom she will; only in the Lord.
+kjv:1Cor:7:40::But she is happier if she so abide, after my judgment: and I think also that I have the Spirit of God.
+kjv:1Cor:8:1::Now as touching things offered unto idols, we know that we all have knowledge. Knowledge puffeth up, but charity edifieth.
+kjv:1Cor:8:2::And if any man think that he knoweth any thing, he knoweth nothing yet as he ought to know.
+kjv:1Cor:8:3::But if any man love God, the same is known of him.
+kjv:1Cor:8:4::As concerning therefore the eating of those things that are offered in sacrifice unto idols, we know that an idol [is] nothing in the world, and that [there is] none other God but one.
+kjv:1Cor:8:5::For though there be that are called gods, whether in heaven or in earth, (as there be gods many, and lords many,)
+kjv:1Cor:8:6::But to us [there is but] one God, the Father, of whom [are] all things, and we in him; and one Lord Jesus Christ, by whom [are] all things, and we by him.
+kjv:1Cor:8:7::Howbeit [there is] not in every man that knowledge: for some with conscience of the idol unto this hour eat [it] as a thing offered unto an idol; and their conscience being weak is defiled.
+kjv:1Cor:8:8::But meat commendeth us not to God: for neither, if we eat, are we the better; neither, if we eat not, are we the worse.
+kjv:1Cor:8:9::But take heed lest by any means this liberty of yours become a stumblingblock to them that are weak.
+kjv:Ruth:4:4::And I thought to advertise thee, saying, Buy [it] before the inhabitants, and before the elders of my people. If thou wilt redeem [it], redeem [it]: but if thou wilt not redeem [it, then] tell me, that I may know: for [there is] none to redeem [it] beside thee; and I [am] after thee. And he said, I will redeem [it].
+kjv:Ruth:4:5::Then said Boaz, What day thou buyest the field of the hand of Naomi, thou must buy [it] also of Ruth the Moabitess, the wife of the dead, to raise up the name of the dead upon his inheritance.
+kjv:Ruth:4:6::And the kinsman said, I cannot redeem [it] for myself, lest I mar mine own inheritance: redeem thou my right to thyself; for I cannot redeem [it].
+kjv:Ruth:4:7::Now this [was the manner] in former time in Israel concerning redeeming and concerning changing, for to confirm all things; a man plucked off his shoe, and gave [it] to his neighbour: and this [was] a testimony in Israel.
+kjv:Ruth:4:8::Therefore the kinsman said unto Boaz, Buy [it] for thee. So he drew off his shoe.
+kjv:Ruth:4:9::And Boaz said unto the elders, and [unto] all the people, Ye [are] witnesses this day, that I have bought all that [was] Elimelech's, and all that [was] Chilion's and Mahlon's, of the hand of Naomi.
+kjv:Ruth:4:10::Moreover Ruth the Moabitess, the wife of Mahlon, have I purchased to be my wife, to raise up the name of the dead upon his inheritance, that the name of the dead be not cut off from among his brethren, and from the gate of his place: ye [are] witnesses this day.
+kjv:Ruth:4:11::And all the people that [were] in the gate, and the elders, said, [We are] witnesses. The LORD make the woman that is come into thine house like Rachel and like Leah, which two did build the house of Israel: and do thou worthily in Ephratah, and be famous in Bethlehem:
+kjv:Ruth:4:12::And let thy house be like the house of Pharez, whom Tamar bare unto Judah, of the seed which the LORD shall give thee of this young woman.
+kjv:Ruth:4:13::So Boaz took Ruth, and she was his wife: and when he went in unto her, the LORD gave her conception, and she bare a son.
+kjv:Ruth:4:14::And the women said unto Naomi, Blessed [be] the LORD, which hath not left thee this day without a kinsman, that his name may be famous in Israel.
+kjv:Ruth:4:15::And he shall be unto thee a restorer of [thy] life, and a nourisher of thine old age: for thy daughter in law, which loveth thee, which is better to thee than seven sons, hath born him.
+kjv:Ruth:4:16::And Naomi took the child, and laid it in her bosom, and became nurse unto it.
+kjv:Zep:2:10::This shall they have for their pride, because they have reproached and magnified [themselves] against the people of the LORD of hosts.
+kjv:Zep:2:11::The LORD [will be] terrible unto them: for he will famish all the gods of the earth; and [men] shall worship him, every one from his place, [even] all the isles of the heathen.
+kjv:Zep:2:12::Ye Ethiopians also, ye [shall be] slain by my sword.
+kjv:Zep:2:13::And he will stretch out his hand against the north, and destroy Assyria; and will make Nineveh a desolation, [and] dry like a wilderness.
+kjv:Zep:2:14::And flocks shall lie down in the midst of her, all the beasts of the nations: both the cormorant and the bittern shall lodge in the upper lintels of it; [their] voice shall sing in the windows; desolation [shall be] in the thresholds: for he shall uncover the cedar work.
+kjv:Zep:2:15::This [is] the rejoicing city that dwelt carelessly, that said in her heart, I [am], and [there is] none beside me: how is she become a desolation, a place for beasts to lie down in! every one that passeth by her shall hiss, [and] wag his hand.

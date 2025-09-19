@@ -15,27 +15,49 @@ typedef struct {
 typedef struct {
   Verse* verses;
   usize count;
+  usize cap;
   Arena* arena;
 } ThreadVerses;
 
 typedef struct {
   u8* begin;
   u8* end;
-  Arena* arena;
   ThreadVerses* out;
 } SliceArg;
 
-typedef struct {
-  Arena* main_arena;
-  usize offset;
-  usize size;
-} ThreadArena;
+static Verse* tv_alloc_array(Arena* arena, usize n) {
+  if (n == 0) return NULL;
+  // compute bytes carefully
+  size_t bytes = n * sizeof(Verse);
+  // overflow check
+  if (bytes / sizeof(Verse) != n) return NULL;
+  return (Verse*)arena_alloc(arena, bytes);
+}
+
+static void threadverses_init(ThreadVerses *tv, Arena *arena) {
+  tv->verses = NULL;
+  tv->count  = 0;
+  tv->cap    = 0;
+  tv->arena  = arena;
+}
 
 static void push_verse(ThreadVerses* tv, Verse v) {
-  Verse* slot = push_one(tv->arena, Verse);
-  *slot = v;
-  if (tv->count == 0) tv->verses = slot;
-  tv->count++;
+  if (tv->cap == 0) {
+    usize new_cap = KB(1);
+    Verse* arr = tv_alloc_array(tv->arena, new_cap);
+    if (!arr) ERROR("failed to alloc verse array for tv");
+    tv->verses = arr;
+    tv->cap = new_cap;
+  } else if (tv->count >= tv->cap) {
+    usize new_cap = tv->cap * 2;
+    Verse* new_arr = tv_alloc_array(tv->arena, new_cap);
+    if (!new_arr) ERROR("failed to alloc verse array for tv");
+    MemoryCopy(new_arr, tv->verses, tv->count * sizeof(Verse));
+    tv->verses = new_arr;
+    tv->cap = new_cap;
+  }
+
+  tv->verses[tv->count++] = v;
 }
 
 static Verse parse_line(String8 line) {
@@ -69,15 +91,17 @@ static Verse parse_line(String8 line) {
 
 void* parse_slice_thread(void* arg_) {
   SliceArg* arg = (SliceArg*)arg_;
-  Temp temp = scratch_begin(arg->arena);
+  ThreadVerses* tv = arg->out;
+  Temp temp = scratch_begin(tv->arena);
+
   u8* p = arg->begin;
   while (p < arg->end) {
     u8* line_end = memchr(p, '\n', arg->end - p);
     if (!line_end) line_end = arg->end;
 
-    String8 line = {p, line_end-p};
+    String8 line = str8_range(p, line_end);
     Verse v = parse_line(line);
-    push_verse(arg->out, v);
+    push_verse(tv, v);
 
     p = line_end + 1;
   }
@@ -86,20 +110,19 @@ void* parse_slice_thread(void* arg_) {
   return NULL;
 }
 
-static void split_buffer_lines(Arena* arena, String8 string, i32 num_threads,
-                               SliceArg* slices, ThreadVerses* outs) {
+static void split_buffer_lines(String8 string, i32 num_threads, SliceArg* slices, ThreadVerses* outs) {
   usize approx = string.size / num_threads;
   usize start  = 0;
 
   for (i32 t = 0; t < num_threads; t++) {
     usize end = (t == num_threads - 1) ? string.size : start + approx;
     while (end < string.size && string.str[end] != '\n') end++;
+    if (end < string.size) end++;
     slices[t].begin = string.str + start;
     slices[t].end   = string.str + end;
-    slices[t].arena = arena;
     slices[t].out   = &outs[t];
 
-    start = end + 1;
+    start = end;
   }
 }
 
@@ -107,20 +130,16 @@ void parse_bible_file_mt(Arena* arena, String8 string, i32 num_threads, ThreadVe
   pthread_t threads[num_threads];
   SliceArg  slices[num_threads];
 
-  for (i32 t = 0; t < num_threads; t++) {
-    Arena* thread_arena = arena_alloc(arena, sizeof(Arena));
-    arena_init(thread_arena, KB(64));
-    outs[t].count  = 0;
-    outs[t].verses = NULL;
-    outs[t].arena  = arena;
-  }
 
-  split_buffer_lines(arena, string, num_threads, slices, outs);
+
+  split_buffer_lines(string, num_threads, slices, outs);
 
   for (i32 t = 0; t < num_threads; t++) {
     pthread_create(&threads[t], NULL, parse_slice_thread, &slices[t]);
   }
+
   for (i32 t = 0; t < num_threads; t++) {
+    DEBUG("joining thread %d", t);
     pthread_join(threads[t], NULL);
   }
   
@@ -129,17 +148,41 @@ void parse_bible_file_mt(Arena* arena, String8 string, i32 num_threads, ThreadVe
 i32 main(i32 argc, const char* argv[]) {
   Arena arena = {0};
   arena_init(&arena, MB(8));
-  String8 kjv_csv_contents = read_file(&arena, "data/kjv.csv", KB(2));
-  CSVDocument kjv_csv = parse_csv(&arena, kjv_csv_contents);
+  /* String8 kjv_csv_contents = read_file(&arena, "data/kjv.csv", KB(2)); */
+  /* CSVDocument kjv_csv = parse_csv(&arena, kjv_csv_contents); */
   String8 kjv_txt = read_file(&arena, "data/kjv.txt", MB(5));
+  /* String8 kjv_sample_txt = read_file(&arena, "data/kjv_sample.txt", KB(6)); */
 
-  ThreadVerses* outs = push_one(&arena, ThreadVerses);
-  outs->arena = &arena;
-  parse_bible_file_mt(&arena, kjv_txt, 4, outs);
+  u8 nthreads = 4;
+  ThreadVerses* tvs = push_array(&arena, ThreadVerses, nthreads);
+  Arena* thread_arenas = push_array(&arena, Arena, nthreads);
 
-  for (i32 i = 0; i < outs->count; i++) {
-    LOG("%.*s",str8_varg(outs->verses[i].text));
+  for (i32 t = 0; t < nthreads; t++) {
+    arena_init(&thread_arenas[t], KB(64));
+    threadverses_init(&tvs[t], &thread_arenas[t]);
   }
+  parse_bible_file_mt(&arena, kjv_txt, nthreads, tvs);
+  /* parse_bible_file_mt(&arena, kjv_sample_txt, nthreads, tvs); */
+
+  u64 total_count = 0;
+  for (i32 t = 0; t < nthreads; t++) {
+    /* total_count += tvs[tvi].count; */
+    ThreadVerses tv = tvs[t];
+    for (i32 i = 0; i < tv.count; i++) {
+      LOG("%.*s:%.*s:%.*s:%.*s:%.*s",
+          str8_varg(tv.verses[i].bible),
+          str8_varg(tv.verses[i].book),
+          str8_varg(tv.verses[i].chapter),
+          str8_varg(tv.verses[i].verse),
+          str8_varg(tv.verses[i].text)
+         );
+
+      total_count++;
+    }
+  }
+  DEBUG("total_count: %lu", total_count);
+  for (i32 t = 0; t < nthreads; t++)
+    arena_free(&thread_arenas[t]);
 
   arena_free(&arena);
   return 0;

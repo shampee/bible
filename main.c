@@ -30,30 +30,32 @@ i32 main(i32 argc, const char* argv[]) {
   for (i32 t = 0; t < nthreads; t++) {
     ThreadVerses tv = tvs[t];
     for (i32 i = 0; i < tv.count; i++) {
-      Verse verse = tv.verses[i];
+      // Copying, because otherwise we insert something pointing at the same thing over and over
+      Verse* copy = push_one(&arena, Verse);
+      MemoryCopy(copy, &tv.verses[i], sizeof(Verse));
       String8 key = str8f(&arena,
                           "%.*s:%.*s:%.*s:%.*s",
-                          str8_varg(verse.bible),
-                          str8_varg(verse.book),
-                          str8_varg(verse.chapter),
-                          str8_varg(verse.verse));
+                          str8_varg(copy->bible),
+                          str8_varg(copy->book),
+                          str8_varg(copy->chapter),
+                          str8_varg(copy->verse));
       str8_list_push(&arena, &keys, key);
-      hashtable_insert(&arena, &ht, key, (void*)&verse);
-      /* DEBUG("%.*s", str8_varg(key)); */
-
+      hashtable_insert(&arena, &ht, key, (void*)copy);
       total_count++;
     }
   }
-  arena_reset(&arena);
 
-  /* Verse* verse = hashtable_lookup(&ht, str8_lit("kjv:Zep:2:14")); */
-  String8 term =str8_lit("Zep11");
+  Verse* verse = hashtable_lookup(&ht, str8_lit("kjv:Zep:2:14"));
+  String8 term = str8_lit("Zep11");
   SearchResult search = search_keys(&arena, term, keys);
   DEBUG("query count: %lu",search.query_count);
   DEBUG("with term %.*s, closest match: %.*s",
         str8_varg(term),
         str8_varg(search.closest));
-  
+  DEBUG("finding text based on search query");
+  Verse* lookup = (Verse*)hashtable_lookup(&ht, search.closest);
+  Verse* lk = (Verse*)hashtable_lookup(&ht, str8_lit("kjv:Zec:9:16"));
+
   for (i32 t = 0; t < nthreads; t++) arena_free(&thread_arenas[t]);
   arena_free(&arena);
   return 0;

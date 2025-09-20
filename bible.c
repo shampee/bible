@@ -10,7 +10,7 @@ void threadverses_init(Arena* arena, ThreadVerses* tv) {
 Verse* tv_alloc_array(Arena* arena, usize n) {
   if (n == 0) return NULL;
   // compute bytes carefully
-  size_t bytes = n * sizeof(Verse);
+  usize bytes = n * sizeof(Verse);
   // overflow check
   if (bytes / sizeof(Verse) != n) return NULL;
   return (Verse*)arena_alloc(arena, bytes);
@@ -107,8 +107,6 @@ void parse_bible_file_mt(Arena* arena, String8 string, i32 num_threads, ThreadVe
   pthread_t threads[num_threads];
   SliceArg  slices[num_threads];
 
-
-
   split_buffer_lines(string, num_threads, slices, outs);
 
   for (i32 t = 0; t < num_threads; t++) {
@@ -116,7 +114,6 @@ void parse_bible_file_mt(Arena* arena, String8 string, i32 num_threads, ThreadVe
   }
 
   for (i32 t = 0; t < num_threads; t++) {
-    DEBUG("joining thread %d", t);
     pthread_join(threads[t], NULL);
   }
 }

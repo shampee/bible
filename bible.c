@@ -17,7 +17,7 @@ Verse* tv_alloc_array(Arena* arena, usize n) {
 }
 
 
-/* We're using this approach as we want ThreadVerses to be a contiguous block */
+/* We're using this approach as we want verses to be a contiguous block */
 void push_verse(ThreadVerses* tv, Verse v) {
   if (tv->cap == 0) {
     usize new_cap = KB(1);
@@ -69,7 +69,6 @@ Verse parse_line(String8 line) {
 void* parse_slice_thread(void* arg_) {
   SliceArg* arg = (SliceArg*)arg_;
   ThreadVerses* tv = arg->out;
-  Temp temp = scratch_begin(tv->arena);
 
   u8* p = arg->begin;
   while (p < arg->end) {
@@ -83,7 +82,6 @@ void* parse_slice_thread(void* arg_) {
     p = line_end + 1;
   }
 
-  scratch_end(&temp);
   return NULL;
 }
 

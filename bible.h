@@ -27,7 +27,7 @@ struct SliceArg {
   ThreadVerses* out;
 };
 
-void   threadverses_init(ThreadVerses *tv, Arena *arena);
+void   threadverses_init(Arena* arena, ThreadVerses* tv);
 Verse* tv_alloc_array(Arena* arena, usize n);
 Verse  parse_line(String8 line);
 void   push_verse(ThreadVerses* tv, Verse v);

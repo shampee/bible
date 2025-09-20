@@ -1,6 +1,6 @@
 #include "bible.h"
 
-void threadverses_init(ThreadVerses *tv, Arena *arena) {
+void threadverses_init(Arena* arena, ThreadVerses* tv) {
   tv->verses = NULL;
   tv->count  = 0;
   tv->cap    = 0;

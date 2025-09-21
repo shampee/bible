@@ -3,6 +3,6 @@
 #include "base/base_inc.h"
 #include <unistd.h>
 
-#define N_THREADS sysconf(_SC_NPROCESSORS_ONLN)
+#define N_CORES sysconf(_SC_NPROCESSORS_ONLN)
 
 #endif // CORE_H

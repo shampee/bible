@@ -11,7 +11,7 @@ i32 main(i32 argc, const char* argv[]) {
   /* CSVDocument kjv_csv = parse_csv(&arena, kjv_csv_contents); */
   String8 kjv_txt = read_file(&arena, "data/kjv.txt", MB(5));
 
-  u8 nthreads = N_THREADS;
+  u8 nthreads = N_CORES*2;
   DEBUG("nthreads = %d", nthreads);
   ThreadVerses* tvs = push_array(&arena, ThreadVerses, nthreads);
   Arena* thread_arenas = push_array(&arena, Arena, nthreads);

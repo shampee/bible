@@ -17,7 +17,7 @@ i32 main(i32 argc, const char* argv[]) {
   Arena* thread_arenas = push_array(&arena, Arena, nthreads);
 
   for (i32 t = 0; t < nthreads; t++) {
-    arena_init(&thread_arenas[t], KB(64));
+    arena_init(&thread_arenas[t], MB(1));
     threadverses_init(&thread_arenas[t], &tvs[t]);
   }
   parse_bible_file_mt(&arena, kjv_txt, nthreads, tvs);

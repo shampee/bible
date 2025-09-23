@@ -75,17 +75,14 @@ i32 main(i32 argc, const char* argv[]) {
   for (i32 t = 0; t < nthreads; t++) {
     ThreadVerses tv = tvs[t];
     for (i32 i = 0; i < tv.count; i++) {
-      // Copying, because otherwise we insert something pointing at the same thing over and over
-      Verse* copy = push_one(&arena, Verse);
-      MemoryCopy(copy, &tv.verses[i], sizeof(Verse));
       String8 key = str8f(&arena,
                           "%.*s:%.*s:%.*s:%.*s",
-                          str8_varg(copy->bible),
-                          str8_varg(copy->book),
-                          str8_varg(copy->chapter),
-                          str8_varg(copy->verse));
+                          str8_varg(tv.verses[i].bible),
+                          str8_varg(tv.verses[i].book),
+                          str8_varg(tv.verses[i].chapter),
+                          str8_varg(tv.verses[i].verse));
       str8_list_push(&arena, &keys, key);
-      hashtable_insert(&arena, &ht, key, (void*)copy);
+      hashtable_insert(&arena, &ht, key, &tv.verses[i]);
     }
   }
 

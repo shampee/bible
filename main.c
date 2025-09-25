@@ -46,9 +46,9 @@ i32 main(i32 argc, const char* argv[]) {
     ? config.csv_path
     : str8_cat(&arena, data_path, str8_lit("kjv.csv"));
 
-  /* String8 kjv_csv_contents = read_file(&arena, "data/kjv.csv", KB(2)); */
-  /* CSVDocument kjv_csv = parse_csv(&arena, kjv_csv_contents); */
   String8 bible_txt = read_file(&arena, (char*)bible_path.str, MB(5));
+  String8 bible_csv = read_file(&arena, (char*)csv_path.str, KB(2));
+  CSVDocument csv = parse_csv(&arena, bible_csv);
 
   u8 nthreads = config.nthreads;
   ThreadVerses* tvs = push_array(&arena, ThreadVerses, nthreads);
@@ -68,13 +68,20 @@ i32 main(i32 argc, const char* argv[]) {
   // with keys in the form of: bible:book:chapter:verse
   // Each entry is a structure of 5 String8
   // representing the same information as the key plus the actual text.
-  for (i32 t = 0; t < nthreads; t++) {
+  for (u64 t = 0; t < nthreads; t++) {
     ThreadVerses tv = tvs[t];
-    for (i32 i = 0; i < tv.count; i++) {
+    for (u64 i = 0; i < tv.count; i++) {
+      String8 long_book_name;
+      for (u64 l = 0; l < csv.line_count; l++) {
+        if (str8_match(tv.verses[i].book, csv.lines[l].short_name, 0)) {
+          long_book_name = csv.lines[l].long_name;
+          tv.verses[i].book = long_book_name;
+        }
+      }
       String8 key = str8f(&arena,
                           "%.*s:%.*s:%.*s:%.*s",
                           str8_varg(tv.verses[i].bible),
-                          str8_varg(tv.verses[i].book),
+                          str8_varg(long_book_name),
                           str8_varg(tv.verses[i].chapter),
                           str8_varg(tv.verses[i].verse));
       str8_list_push(&arena, &keys, key);
@@ -96,8 +103,8 @@ i32 main(i32 argc, const char* argv[]) {
 
 
 i32 print_help(Arena* arena, OptList* options, u64 noptions) {
-  LOG("bible v0.4.0");
-  LOG("Usage: bible [TERM]...");
+  LOG("bible v0.4.1");
+  LOG("Usage: bible [OPTION]... [TERM]...");
   LOG("Find bible verses based on search term");
   print_options(options, noptions, 2);
   arena_free(arena);

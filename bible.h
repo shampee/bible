@@ -31,6 +31,7 @@ void   threadverses_init(Arena* arena, ThreadVerses* tv);
 Verse* tv_alloc_array(Arena* arena, usize n);
 Verse  parse_line(String8 line);
 void   push_verse(ThreadVerses* tv, Verse v);
+void   print_verse(Arena* arena, Verse* v, u64 max_line_length);
 void*  parse_slice_thread(void* arg_);
 void   split_buffer_lines(String8 string, i32 num_threads, SliceArg* slices, ThreadVerses* outs);
 void   parse_bible_file_mt(Arena* arena, String8 string, i32 num_threads, ThreadVerses* outs);

@@ -36,6 +36,42 @@ void push_verse(ThreadVerses* tv, Verse v) {
 
   tv->verses[tv->count++] = v;
 }
+void print_verse(Arena* arena, Verse* v, u64 max_line_length) {
+  if (!v) return;
+
+  LOG("%.*s %.*s:%.*s", str8_varg(v->book), str8_varg(v->chapter),
+      str8_varg(v->verse));
+
+  if (max_line_length > 0) {
+    u64 cursor = 0;
+    u64 i = 0;
+    while (i < v->text.size) {
+      u64 word_end = str8_find_needle(v->text, i, str8_lit(" "), 0);
+      if (word_end == (u64)-1) {
+        word_end = v->text.size;
+      }
+
+      u64 word_len = word_end - i;
+      if (cursor > 0 && cursor + 1 + word_len > max_line_length) {
+        printf("\n");
+        cursor = 0;
+      }
+
+      if (cursor > 0) {
+        printf(" ");
+        cursor++;
+      }
+
+      fwrite(v->text.str + i, 1, word_len, stdout);
+      cursor += word_len;
+
+      i = word_end + 1;
+    }
+    printf("\n");
+  } else {
+    LOG("%.*s", str8_varg(v->text));
+  }
+}
 
 Verse parse_line(String8 line) {
   u8* p = line.str;

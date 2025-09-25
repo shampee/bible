@@ -82,15 +82,15 @@ Verse parse_line(String8 line) {
 
   while (p < end && *p != ':') p++;
   v.bible = str8_range(field_start, p);
-  p++; field_start = p;
+  field_start = ++p;
 
   while (p < end && *p != ':') p++;
   v.book = str8_range(field_start, p);
-  p++; field_start = p;
+  field_start = ++p;
 
   while (p < end && *p != ':') p++;
   v.chapter = str8_range(field_start, p);
-  p++; field_start = p;
+  field_start = ++p;
 
   while (p < end && *p != ':') p++;
   v.verse = str8_range(field_start, p);

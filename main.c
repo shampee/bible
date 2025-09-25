@@ -12,14 +12,10 @@ i32 main(i32 argc, const char* argv[]) {
   arena_init(&arena, MB(8));
 
   OptList options[] = {
-    opt_list("--help",   "-h", OptTypeHasArgFalse,
-            "display help"),
-    opt_list("--bible",  "-b", OptTypeHasArgTrue,
-            "path to bible text"),
-    opt_list("--csv",    NULL, OptTypeHasArgTrue,
-            "path to corresponding csv file"),
-    opt_list("--threads", "-t", OptTypeHasArgTrue,
-            "how many threads to use (default is 2 * number of cores)"),
+    opt_list("--help",    "-h", OptTypeHasArgFalse, "display help"),
+    opt_list("--bible",   "-b", OptTypeHasArgTrue,  "path to bible text"),
+    opt_list("--csv",     NULL, OptTypeHasArgTrue,  "path to corresponding csv file"),
+    opt_list("--threads", "-t", OptTypeHasArgTrue,  "how many threads to use (default is 2 * number of cores)"),
   };
   usize noptions = ArrayCount(options);
 
@@ -89,10 +85,9 @@ i32 main(i32 argc, const char* argv[]) {
   DEBUG("looking for keys using term: %s", config.term.str);
   SearchResult search = search_keys(&arena, config.term, keys);
   DEBUG("using key: %s", search.closest.str);
-  /* printf(SGR_1FMT(1, "%.*s\n", str8_varg(search.closest))); */
   Verse* lookup_verse = (Verse*)hashtable_lookup(&ht, search.closest);
 
-  LOG("%.*s", str8_varg(lookup_verse->text));
+  print_verse(&arena, lookup_verse, 0);
 
   for (i32 t = 0; t < nthreads; t++) arena_free(&thread_arenas[t]);
   arena_free(&arena);

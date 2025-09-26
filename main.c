@@ -5,7 +5,14 @@
 #include "search.h"
 #include "util.h"
 
-i32 print_help(Arena* arena, OptList* options, u64 noptions);
+i32 print_help(Arena* arena, OptList* options, u64 noptions) {
+  LOG("bible v0.4.1");
+  LOG("Usage: bible [OPTION]... [TERM]...");
+  LOG("Find bible verses based on search term");
+  print_options(options, noptions, 2);
+  arena_free(arena);
+  return 1;
+}
 
 i32 main(i32 argc, const char* argv[]) {
   Arena arena = {0};
@@ -102,11 +109,3 @@ i32 main(i32 argc, const char* argv[]) {
 }
 
 
-i32 print_help(Arena* arena, OptList* options, u64 noptions) {
-  LOG("bible v0.4.1");
-  LOG("Usage: bible [OPTION]... [TERM]...");
-  LOG("Find bible verses based on search term");
-  print_options(options, noptions, 2);
-  arena_free(arena);
-  return 1;
-}

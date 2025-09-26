@@ -9,18 +9,22 @@ Config config_parse(Arena* arena, OptList* options, usize noptions, String8List 
 
   for (u64 i = 0; i < parsed_options.parsed_count; i++) {
     ParsedArg parsed_arg = parsed_args[i];
-    if (str8_match(parsed_arg.option, str8_lit("help"), 0)) {
+    if (str8_match(parsed_arg.option, str8_lit("h"), 0)
+    ||  str8_match(parsed_arg.option, str8_lit("help"), 0)) {
       result.command = HELP;
       break;
     }
-    if (str8_match(parsed_arg.option, str8_lit("bible"), 0)) {
+    if (str8_match(parsed_arg.option, str8_lit("b"), 0)
+    ||  str8_match(parsed_arg.option, str8_lit("bible"), 0)) {
       result.bible_path = str8_copy(arena, parsed_arg.option_arg);
     }
-    if (str8_match(parsed_arg.option, str8_lit("csv"), 0)) {
+    if (str8_match(parsed_arg.option, str8_lit("c"), 0)
+    ||  str8_match(parsed_arg.option, str8_lit("csv"), 0)) {
       result.csv_path = str8_copy(arena, parsed_arg.option_arg);
     }
-    if (str8_match(parsed_arg.option, str8_lit("threads"), 0)) {
-      result.csv_path = str8_copy(arena, parsed_arg.option_arg);
+    if (str8_match(parsed_arg.option, str8_lit("t"), 0)
+    ||  str8_match(parsed_arg.option, str8_lit("threads"), 0)) {
+      result.nthreads = u64_from_str8(str8_copy(arena, parsed_arg.option_arg), 10);
     }
   }
   scratch_end(&scratch);

@@ -7,7 +7,7 @@ String8 read_file(Arena* arena, String8 file, u64 size) {
   FILE* fp = fopen((char*)file.str, "r");
 
   if (!fp) {
-    ERROR("failed to open file: %s", file);
+    ERROR("failed to open file: %s", file.str);
     return str8_zero();
   }
 

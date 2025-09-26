@@ -1,10 +1,10 @@
 #include "util.h"
 
-String8 read_file(Arena* arena, const char* file, u64 size) {
+String8 read_file(Arena* arena, String8 file, u64 size) {
   char* result;
   char buffer[size];
   i32 ret;
-  FILE* fp = fopen(file, "r");
+  FILE* fp = fopen((char*)file.str, "r");
 
   if (!fp) {
     ERROR("failed to open file: %s", file);

@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -std=c11 -pedantic -Wno-missing-braces -Wmissing-field-initializers -pthread  -g
+CFLAGS = -Wall -std=c11 -pedantic -Wno-missing-braces -Wmissing-field-initializers -pthread -s -O2
 LFLAGS = -lm
 
 BASE_SOURCES = base/base_core.c base/base_math.c base/base_strings.c base/base_args.c  base/base_log.c base/base_hashtable.c

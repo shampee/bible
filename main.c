@@ -53,8 +53,8 @@ i32 main(i32 argc, const char* argv[]) {
     ? config.csv_path
     : str8_cat(&arena, data_path, str8_lit("kjv.csv"));
 
-  String8 bible_txt = read_file(&arena, (char*)bible_path.str, MB(5));
-  String8 bible_csv = read_file(&arena, (char*)csv_path.str, KB(2));
+  String8 bible_txt = read_file(&bible_arena, bible_path, txt_size);
+  String8 bible_csv = read_file(&bible_arena, csv_path, csv_size);
   CSVDocument csv = parse_csv(&arena, bible_csv);
 
   u8 nthreads = config.nthreads;

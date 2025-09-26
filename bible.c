@@ -42,7 +42,9 @@ void print_verse(Arena* arena, Verse* v, u64 max_line_length) {
   LOG("%.*s %.*s:%.*s", str8_varg(v->book), str8_varg(v->chapter),
       str8_varg(v->verse));
 
-  if (max_line_length > 0) {
+  if (max_line_length == 0) {
+    LOG("%.*s", str8_varg(v->text));
+  } else {
     u64 cursor = 0;
     u64 i = 0;
     while (i < v->text.size) {
@@ -68,8 +70,6 @@ void print_verse(Arena* arena, Verse* v, u64 max_line_length) {
       i = word_end + 1;
     }
     printf("\n");
-  } else {
-    LOG("%.*s", str8_varg(v->text));
   }
 }
 

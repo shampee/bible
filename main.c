@@ -115,7 +115,7 @@ i32 main(i32 argc, const char* argv[]) {
                           str8_varg(tv.verses[i].chapter),
                           str8_varg(tv.verses[i].verse));
       str8_list_push(&arena, &keys, key);
-      hashtable_insert(&arena, &ht, key, &tv.verses[i]);
+      hashtable_insert(&arena, &ht, key, &tv.verses[i], true);
     }
   }
 

@@ -1,6 +1,6 @@
 #include "util.h"
 
-String8 read_file(Arena* arena, String8 file, u64 size) {
+String8 read_file(Allocator* allocator, String8 file, u64 size) {
   char* result;
   char buffer[size];
   i32 ret;
@@ -11,7 +11,7 @@ String8 read_file(Arena* arena, String8 file, u64 size) {
     return str8_zero();
   }
 
-  result = push_array(arena, char, size+1);
+  result = push_array(allocator, char, size+1);
 
   ret = fread(result, sizeof(*buffer), size, fp);
   result[ret] = '\0';

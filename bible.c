@@ -1,19 +1,19 @@
 #include "bible.h"
 
-void threadverses_init(Arena* arena, ThreadVerses* tv) {
-  tv->verses = NULL;
-  tv->count  = 0;
-  tv->cap    = 0;
-  tv->arena  = arena;
+void threadverses_init(Allocator* allocator, ThreadVerses* tv) {
+  tv->verses    = NULL;
+  tv->count     = 0;
+  tv->cap       = 0;
+  tv->allocator = allocator;
 }
 
-Verse* tv_alloc_array(Arena* arena, usize n) {
+Verse* tv_alloc_array(Allocator* allocator, usize n) {
   if (n == 0) return NULL;
   // compute bytes carefully
   usize bytes = n * sizeof(Verse);
   // overflow check
   if (bytes / sizeof(Verse) != n) return NULL;
-  return (Verse*)arena_alloc(arena, bytes);
+  return (Verse*)alloc_new(allocator, bytes, AlignOf(Verse));
 }
 
 
@@ -21,13 +21,13 @@ Verse* tv_alloc_array(Arena* arena, usize n) {
 void push_verse(ThreadVerses* tv, Verse v) {
   if (tv->cap == 0) {
     usize new_cap = KB(1);
-    Verse* arr = tv_alloc_array(tv->arena, new_cap);
+    Verse* arr = tv_alloc_array(tv->allocator, new_cap);
     if (!arr) ERROR("failed to alloc verse array for tv");
     tv->verses = arr;
     tv->cap = new_cap;
   } else if (tv->count >= tv->cap) {
     usize new_cap = tv->cap * 2;
-    Verse* new_arr = tv_alloc_array(tv->arena, new_cap);
+    Verse* new_arr = tv_alloc_array(tv->allocator, new_cap);
     if (!new_arr) ERROR("failed to alloc verse array for tv");
     MemoryCopy(new_arr, tv->verses, tv->count * sizeof(Verse));
     tv->verses = new_arr;
@@ -36,7 +36,7 @@ void push_verse(ThreadVerses* tv, Verse v) {
 
   tv->verses[tv->count++] = v;
 }
-void print_verse(Arena* arena, Verse* v, u64 max_line_length) {
+void print_verse(Allocator* allocator, Verse* v, u64 max_line_length) {
   if (!v) return;
 
   LOG("%.*s %.*s:%.*s", str8_varg(v->book), str8_varg(v->chapter),
@@ -137,7 +137,7 @@ void split_buffer_lines(String8 string, i32 num_threads, SliceArg* slices, Threa
   }
 }
 
-void parse_bible_file_mt(Arena* arena, String8 string, i32 num_threads, ThreadVerses* outs) {
+void parse_bible_file_mt(Allocator* allocator, String8 string, i32 num_threads, ThreadVerses* outs) {
   pthread_t threads[num_threads];
   SliceArg  slices[num_threads];
 

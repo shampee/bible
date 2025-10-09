@@ -17,6 +17,6 @@ struct Config {
   CommandType command;
 };
 
-Config config_parse(Arena* arena, OptList* options, usize noptions, String8List arglist);
+Config config_parse(Allocator* allocator, OptList* options, usize noptions, String8List arglist);
 
 #endif

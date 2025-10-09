@@ -16,7 +16,7 @@ struct SearchResult {
   String8 closest;
 };
 
-SearchResult search_keys(Arena* arena, String8 needle, String8List haystack);
+SearchResult search_keys(Allocator* allocator, String8 needle, String8List haystack);
 
 
 #endif

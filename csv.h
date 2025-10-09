@@ -15,6 +15,6 @@ struct CSVDocument {
   u64 line_count;
 };
 
-CSVDocument parse_csv(Arena* arena, String8 line);
+CSVDocument parse_csv(Allocator* allocator, String8 line);
 
 #endif // CSV_H

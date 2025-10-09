@@ -1,9 +1,9 @@
 #include "search.h"
 
-SearchResult search_keys(Arena* arena, String8 needle, String8List haystack) {
+SearchResult search_keys(Allocator* allocator, String8 needle, String8List haystack) {
   SearchResult result;
   result.query_count = haystack.node_count;
-  result.queries = push_array(arena, Query, haystack.node_count);
+  result.queries = push_array(allocator, Query, haystack.node_count);
 
   u64 closest_so_far = 20;
   u64 i = 0;
